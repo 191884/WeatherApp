@@ -14,14 +14,14 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="15dp"
             android:src="@drawable/add_btn"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
         <ImageView
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_margin="10dp"
+            android:layout_margin="15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_menu_24"
@@ -37,7 +37,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="100dp"
             android:gravity="center">
             <ImageView
                 android:id="@+id/locationSign"
@@ -47,10 +47,11 @@
 
             <TextView
                 android:id="@+id/city"
+                android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Bhiwani"
-                android:textSize="30sp" />
+                android:textSize="35sp" />
         </LinearLayout>
 
         <TextView
@@ -77,7 +78,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="30°"
-                android:textSize="70sp" />
+                android:textSize="65sp" />
 
         </LinearLayout>
 
@@ -94,8 +95,18 @@
             android:layout_height="wrap_content"
             android:text="63%"
             android:textSize="20sp"/>
+
+        <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+            android:id="@+id/aa_chart_view"
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+        </com.github.aachartmodel.aainfographics.aachartcreator.AAChartView>
+
     </LinearLayout>
 
-        <include layout="@layout/bottom_sheet" />
+
+
+
+    <include layout="@layout/bottom_sheet" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -11,12 +11,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
+import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
+import com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 import com.snappy.weathermate.databinding.ActivityMainBinding
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
@@ -61,6 +66,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.city.text = response.getJSONObject("city").getString("name")
+            .uppercase(Locale.getDefault())
 
         val list = response.getJSONArray("list")
         val jsonArray = list.getJSONObject(0)
@@ -70,7 +76,8 @@ class MainActivity : AppCompatActivity() {
         binding.weather.text = jsonArray.getJSONArray("weather").getJSONObject(0).getString("main")
         binding.weatherDescription.text = jsonArray.getJSONArray("weather").getJSONObject(0).getString("description")
         val iconID = jsonArray.getJSONArray("weather").getJSONObject(0).getString("icon")
-        Log.e("ICon", "$iconID")
+
+        val graphTempList: ArrayList<Int> = ArrayList()
 
         when (jsonArray.getJSONArray("weather").getJSONObject(0).getString("icon")) {
             "01d" -> binding.tempImg.setImageResource(R.drawable.a01d)
@@ -102,15 +109,32 @@ class MainActivity : AppCompatActivity() {
 //                android.text.format.DateFormat.format("E", date).toString()
 
             val tempAvr: String = ((tempInList.getInt("min")).toString()+ "°C" + " / " + (tempInList.getInt("max")) / 2) + "°C"
-            val weather = dataWeather.getString("description")
-            viewModel.mWeatherItemList.add(WeatherItems(transformedDate, tempAvr, weather))
+            val weatherIcon = dataWeather.getString("icon")
+            graphTempList.add(tempInList.getInt("day"))
+            viewModel.mWeatherItemList.add(WeatherItems(transformedDate, tempAvr, weatherIcon))
 //            weatherItemList.add(WeatherItems(transformedDate, tempAvr, weather))
-            Log.i("Trying recyclerView", "${viewModel.mWeatherItemList.size}")
         }
         val recyclerView: RecyclerView = findViewById(R.id.recycleView)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        val adapter: WeatherAdapter =WeatherAdapter(viewModel.mWeatherItemList)
+        val adapter =WeatherAdapter(viewModel.mWeatherItemList)
         recyclerView.adapter =adapter
+
+
+        val aaChartView = findViewById<AAChartView>(R.id.aa_chart_view)
+        val aaChartModel : AAChartModel = AAChartModel()
+            .chartType(AAChartType.Line)
+            .yAxisTitle("temp")
+            .xAxisVisible(false)
+            .yAxisVisible(false)
+            .backgroundColor("#00000000")
+            .dataLabelsEnabled(true)
+            .series(arrayOf(
+                AASeriesElement()
+                    .name(response.getJSONObject("city").getString("name"))
+                    .data(graphTempList.toArray())
+            )
+            )
+        aaChartView.aa_drawChartWithChartModel(aaChartModel)
     }
 }
