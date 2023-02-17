@@ -2,7 +2,7 @@ package com.snappy.weathermate
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -20,8 +20,6 @@ import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
-import java.util.concurrent.TimeUnit
-import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
@@ -30,12 +28,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val animationZoomOut = AnimationUtils.loadAnimation(this, R.anim.slide_down)
+        binding.coordinatorLayout.startAnimation(animationZoomOut)
 
         //Getting Latitude & Longitude From Location through SplashActivity
-//        val lat = intent.getStringExtra("lat")
-//        val long = intent.getStringExtra("long")
-        val lat =28.7975 .toString()
-        val long = 76.1322 .toString()
+        val lat = intent.getStringExtra("lat")
+        val long = intent.getStringExtra("long")
 
         viewModel = ViewModelProvider(this)[ViewModel::class.java]
         getJsonData(lat!!, long!!)
@@ -44,8 +42,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun getJsonData(lat: String, long: String)
     {
-        Log.e("MainFragment", "$lat $long")
-
         val API_KEY="60c6fbeb4b93ac653c492ba806fc346d"
         val queue = Volley.newRequestQueue(this)
         val url ="https://api.openweathermap.org/data/2.5/forecast/daily?units=metric&lat=${lat}&lon=${long}&appid=${API_KEY}"

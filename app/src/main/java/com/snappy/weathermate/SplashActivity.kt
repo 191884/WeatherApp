@@ -26,12 +26,7 @@ class SplashActivity : AppCompatActivity() {
 
         mfusedlocation= LocationServices.getFusedLocationProviderClient(this)
 
-//        getLastLocation()
-
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish()
-
+        getLastLocation()
     }
 
     @SuppressLint("MissingPermission")
